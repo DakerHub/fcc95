@@ -3,8 +3,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui'
+import router from './router/index.js'
+
 import 'element-ui/lib/theme-default/index.css'
-import './assets/reset.css'
+import './assets/css/reset.css'
+import './assets/css/iconfont.css'
 // import router from './router/index'
 
 Vue.use(ElementUI)
@@ -13,6 +16,7 @@ Vue.config.productionTip = true
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  router,
   template: '<app></app>',
   components: {
     App

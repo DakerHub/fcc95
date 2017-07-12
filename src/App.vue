@@ -1,20 +1,51 @@
 <template>
-  <el-row class="app-wp">
-    <el-col :xs="12" :sm="6" :md="6" :lg="6" class="side-bar">
+  <div class="app-wp">
+    <div class="side-bar">
+      <div class="personal-info">
+        <div class="personal-avatar">
+          <img :src="personalInfo.avatarUrl" alt="fcc">
+        </div>
+        <div class="personal-info-line">
+          <i class="iconfont icon-male2" title="男孩子"></i>
+          <span class="name">{{personalInfo.name}}</span>
+          <i class="iconfont icon-3" title="双子座"></i>
+        </div>
+        <div class="personal-info-line">
+          <i class="iconfont icon-iconlocaltion"></i>
+          <span class="city">{{personalInfo.city}}</span>
+        </div>
+      </div>
       <nav>
-        <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-          <el-menu-item index="1"><i class="el-icon-menu"></i>主页</el-menu-item>
-          <el-menu-item index="2"><i class="el-icon-setting"></i>文章</el-menu-item>
-          <el-menu-item index="3"><i class="el-icon-setting"></i>绘画集</el-menu-item>
-          <el-menu-item index="4"><i class="el-icon-setting"></i>Demo</el-menu-item>
-          <el-menu-item index="5"><i class="el-icon-setting"></i>About</el-menu-item>
+        <el-menu default-active="/Home" class="el-menu-vertical-demo" @select="navSelect" :router="true">
+          <el-menu-item index="/Home"><i class="iconfont icon-home"></i>主页</el-menu-item>
+          <el-menu-item index="/Posts"><i class="iconfont icon-iconfont-momarticle"></i>文章</el-menu-item>
+          <el-menu-item index="/PhotoWall"><i class="iconfont icon-pictureo"></i>绘画集</el-menu-item>
+          <el-menu-item index="/Demo"><i class="iconfont icon-code2"></i>Demo</el-menu-item>
+          <el-menu-item index="/About"><i class="iconfont icon-about"></i>About</el-menu-item>
         </el-menu>
       </nav>
-    </el-col>
-    <el-col :xs="12" :sm="18" :md="18" :lg="18" class="content-wp">
+      <div class="contact">
+        <div v-for="item in personalInfo.contact" class="contact-item">
+          <!--if(item.link)  -->
+          <a v-if="item.link" href="#" class="github-link" :title="item.title">
+            <i :class="[item.iconClass]" v-if="item.iconClass"></i>
+            <span v-if="item.text">{{item.text}}</span>
+          </a>
+          <!--if(item.link)  -->
+          <i :class="item.iconClass"  v-if="item.content && item.iconClass"></i>
+          <label v-if="item.content && item.showTitle && item.iconClass">{{item.title}}:</label>
+          <span :title="item.title" v-if="item.content">{{item.content}}</span>
+          <!--if(item.img) -->
+          <label v-if="item.img && item.showTitle">{{item.title}}:</label>
+          <img v-if="item.img" :src="item.img" alt="item.title" :class="item.imgClass">
 
-    </el-col>
-  </el-row>
+        </div>
+      </div>
+    </div>
+    <div class="content-wp">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -22,15 +53,29 @@ export default {
   name: 'app',
   data () {
     return {
-      author: 'fengcc'
+      personalInfo: {
+        name: 'PaDaker',
+        avatarUrl: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/50931280.jpg',
+        city: '深圳',
+        isBoy: true,
+        constellation: 'Gemini',
+        contact: [
+          {
+            title: 'github',
+            link: '#',
+            iconClass: ['icon-github', 'iconfont']
+          },
+          {
+            title: 'mail',
+            content: '523246656@qq.com',
+            iconClass: ['icon-mail', 'iconfont']
+          }
+        ]
+      }
     }
   },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
+    navSelect (index) {
     }
   }
 }
@@ -39,21 +84,98 @@ export default {
 <style>
 html, body, .app-wp{
   height: 100%;
+  color: #fff;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+a{
+  text-decoration: none;
+  color: #fff;
+}
+.iconfont{
+  font-size: 18px;
+}
+.icon-male2{
+  height: 14px;
+}
+.icon-3{
+  height: 20px;
 }
 .side-bar{
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100%;
+  width: 300px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  background-color: #ccc;
+  justify-content: space-around;
+  background-color: #20A0FF;
 }
 .side-bar nav{
   width: 100%;
   text-align: right;
 }
-.content-wp{
-  height: 100%;
+.side-bar nav .iconfont{
+  margin-right: 10px;
 }
 .el-menu-item{
   padding-right: 40px;
+  font-size: 18px;
+}
+.personal-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+}
+.personal-info-line{
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.personal-info-line .iconfont{
+  margin: 0 10px;
+}
+.personal-avatar{
+  width: 100px;
+  height: 100px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.personal-avatar img{
+  width: 100px;
+  height: 100px;
+}
+.github-link:hover{
+  color: #000;
+}
+.github-link:active{
+  color: #ccc;
+}
+.contact{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 12px;
+  width: 240px;
+  padding-top: 10px;
+  border-top: thin solid #fff;
+}
+.contact-item{
+  margin: 5px 0;
+  display: flex;
+  align-items: baseline;
+}
+.content-wp{
+  height: 100%;
+  width: calc(100% - 300px);
+  margin-left: 300px;
+  color: #000;
 }
 </style>
