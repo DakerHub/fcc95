@@ -42,6 +42,9 @@
         </div>
       </div>
     </div>
+    <header class="header">
+
+    </header>
     <div class="content-wp">
       <router-view></router-view>
     </div>
@@ -111,6 +114,7 @@ a{
   align-items: center;
   justify-content: space-around;
   background-color: #20A0FF;
+  transition: left .5s;
 }
 .side-bar nav{
   width: 100%;
@@ -124,12 +128,12 @@ a{
   font-size: 18px;
 }
 .personal-info{
+  flex: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 200px;
-  height: 200px;
 }
 .personal-info-line{
   margin-top: 20px;
@@ -159,6 +163,7 @@ a{
   color: #ccc;
 }
 .contact{
+  flex: none;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -172,10 +177,42 @@ a{
   display: flex;
   align-items: baseline;
 }
-.content-wp{
-  height: 100%;
+.header{
   width: calc(100% - 300px);
+  height: 40px;
   margin-left: 300px;
+  border-bottom: thin solid #dcdcdc;
+}
+.content-wp{
+  width: 600px;
+  margin-left: 400px;
   color: #000;
+  transition: margin .5s;
+}
+/*大屏用户*/
+@media screen and (min-width: 1300px) {
+.content-wp{
+  width: calc(70% - 300px);
+}
+}
+/*窄屏*/
+@media screen and (max-width: 1079px) {
+.side-bar{
+  left: -300px;
+}
+.content-wp{
+  margin: 0 auto;
+  transition: margin .5s;
+}
+.header{
+  width: 100%;
+  margin-left: 0;
+}
+}
+/*小屏*/
+@media screen and (max-height: 560px) {
+.personal-avatar{
+  display: none;
+}
 }
 </style>

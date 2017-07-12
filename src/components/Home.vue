@@ -3,7 +3,7 @@
     <div class="home-content">
       <el-carousel indicator-position="outside">
         <el-carousel-item v-for="item in recentPhotos" :key="item.name">
-          <img :src="item.url" alt="item.name" class="img">
+          <img :src="item.url" :alt="item.name" class="img">
         </el-carousel-item>
       </el-carousel>
       <h2 class="recent-post-title">最近文章：</h2>
@@ -23,60 +23,43 @@
   </div>
 </template>
 <script>
+  import Vue from 'vue'
   export default {
     name: 'home',
     data () {
       return {
-        recentPosts: [
-          {
-            title: 'Vue官网教程学习-2',
-            abstract: '1.模块化，需要require引用模块2.fs模块，支持本地文件操作。3.http模块，创建web服务器，以及创建客服端请求；',
-            date: '2017/6/7',
-            tags: ['前端', 'vue', 'Nodejs']
-          },
-          {
-            title: 'Vue官网教程学习-1',
-            abstract: '1.模块化，需要require引用模块2.fs模块，支持本地文件操作。3.http模块，创建web服务器，以及创建客服端请求；',
-            date: '2017/6/7',
-            tags: ['前端', 'vue', 'Nodejs']
-          },
-          {
-            title: 'Vue官网教程学习-0',
-            abstract: '1.模块化，需要require引用模块2.fs模块，支持本地文件操作。3.http模块，创建web服务器，以及创建客服端请求；',
-            date: '2017/6/7',
-            tags: ['前端', 'vue', 'Nodejs']
-          }
-        ],
-        recentPhotos: [
-          {
-            name: 'a',
-            url: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/12910508.jpg'
-          },
-          {
-            name: 'b',
-            url: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/2165555.jpg'
-          },
-          {
-            name: 'd',
-            url: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/89694588.jpg'
-          },
-          {
-            name: 'c',
-            url: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/67706257.jpg'
-          }
-        ]
+        recentPosts: [],
+        recentPhotos: [],
+        date: ''
       }
     },
     methods: {
       turnToPost (title) {
         console.log(title)
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPosts').then(function (res) {
+        var recentPosts = res.body
+        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
+          var recentPhotos = res.body
+          next(function (vm) {
+            for (let i = 0; i < recentPosts.length; i++) {
+              vm.recentPosts.splice(0, 0, recentPosts[i])
+            }
+            for (let i = 0; i < recentPhotos.length; i++) {
+              vm.recentPhotos.splice(0, 0, recentPhotos[i])
+            }
+          })
+        })
+      })
     }
   }
 </script>
 <style>
 .img{
-  width: 100%;
+  width: 600px;
+  margin: 0 auto;
 }
 .recent-post-title{
   overflow: hidden;
@@ -92,28 +75,33 @@
   height: 100%;
 }
 .home-content{
-  width: 600px;
+  width: 100%;
   margin: 0 auto;
   padding: 10px 0;
 }
 .el-carousel{
-  background-color: #023961;
+  background-color: #1F2D3D;
   border-radius: 5px;
 }
+.el-carousel__container{
+  background-color: #475669;
+}
 .el-carousel__item{
-  background-color: #666;
+  display: flex;
+  background-color: #99A9BF;
 }
 .recentPost{
-  border: thin solid #ccc;
+  border: 2px dashed #99a9bf;
   padding: 10px 20px;
   margin: 10px 0;
   font-size: 14px;
   border-radius: 5px;
   color: #676767;
-  transition: all .2s;
+  transition: all .3s;
 }
 .recentPost:hover{
   box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
+  border-color: #1D8CE0;
 }
 .turn-to{
   color: #383737;
