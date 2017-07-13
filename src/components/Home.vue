@@ -56,7 +56,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
 .img{
   width: 600px;
   margin: 0 auto;

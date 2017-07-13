@@ -46,7 +46,9 @@
 
     </header>
     <div class="content-wp">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -182,6 +184,7 @@ a{
   height: 40px;
   margin-left: 300px;
   border-bottom: thin solid #dcdcdc;
+  background-color: #fff;
 }
 .content-wp{
   width: 600px;
