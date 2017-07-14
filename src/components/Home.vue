@@ -1,14 +1,14 @@
 <template>
   <div class="home">
     <div class="home-content">
-      <el-carousel indicator-position="outside">
+      <el-carousel indicator-position="outside" :height="imgAutoHeight">
         <el-carousel-item v-for="item in recentPhotos" :key="item.name">
           <img :src="item.url" :alt="item.name" class="img">
         </el-carousel-item>
       </el-carousel>
       <h2 class="recent-post-title">最近文章：</h2>
       <article class="recentPost" v-for="(post,index) in recentPosts">
-        <h3 class="post-title">{{post.title}} <a href="#" class="turn-to" @click.prevent="turnToPost(post.title)"><i class="el-icon-d-arrow-right"></i></a></h3>
+        <h3 class="post-title" @click="turnToPost(post.title)">{{post.title}} <a href="#" class="turn-to" @click.prevent="turnToPost(post.title)"><i class="el-icon-d-arrow-right"></i></a></h3>
         <div class="post-abstract">
           {{post.abstract}}
         </div>
@@ -36,9 +36,17 @@
         date: ''
       }
     },
+    computed: {
+      imgAutoHeight () {
+        var wH = window.innerWidth
+        var width = wH > 768 ? 300 : wH / 2
+        return width + 'px'
+      }
+    },
     methods: {
       turnToPost (title) {
         console.log(title)
+        this.$router.push({path: '/post/' + title})
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -48,6 +56,10 @@
           Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
             var recentPhotos = res.body
             next(function (vm) {
+              var originMenu = vm.$parent.$refs.navMenu.activedIndex
+              if (to.path.indexOf(originMenu) === -1) {
+                vm.$parent.$refs.navMenu.activedIndex = to.path
+              }
               for (let i = 0; i < recentPosts.length; i++) {
                 vm.recentPosts.splice(0, 0, recentPosts[i])
               }
@@ -59,7 +71,12 @@
         })
         loadResourceFinish = true
       } else {
-        next()
+        next(function (vm) {
+          var originMenu = vm.$parent.$refs.navMenu.activedIndex
+          if (to.path.indexOf(originMenu) === -1) {
+            vm.$parent.$refs.navMenu.activedIndex = to.path
+          }
+        })
       }
     }
   }
@@ -127,7 +144,11 @@
   font-size: 1.2em;
   padding: 10px 0;
   position: relative;
+  cursor: pointer;
   color: #383737;
+}
+.post-title:hover{
+  text-decoration: underline;
 }
 .post-title::after{
   content: '';
@@ -153,5 +174,11 @@
 }
 .post-meta-item{
   margin-right: 20px;
+}
+@media screen and (max-width: 768px) {
+.img{
+  width: 100%;
+  height: auto;
+}
 }
 </style>

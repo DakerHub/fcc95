@@ -5,6 +5,7 @@ import Home from '../components/Home.vue'
 import Demo from '../components/Demo.vue'
 import PhotoWall from '../components/PhotoWall.vue'
 import Posts from '../components/Posts.vue'
+import Post from '../components/Post.vue'
 
 Vue.use(Router)
 
@@ -16,6 +17,9 @@ export default new Router({
     { path: '/demo', component: Demo },
     { path: '/about', component: About },
     { path: '/photoWall', component: PhotoWall },
-    { path: '/posts', component: Posts }
+    { path: '/posts',
+      component: Posts
+    },
+    { path: '/post/:title', component: Post }
   ]
 })

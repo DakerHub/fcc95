@@ -93,6 +93,10 @@ html, body, .app-wp{
   color: #fff;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
+.el-menu-item.is-active{
+  color: #fff;
+  background-color: #20a0ff;
+}
 a{
   text-decoration: none;
   color: #fff;
@@ -110,6 +114,7 @@ a{
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 999;
   height: 100%;
   width: 300px;
   display: flex;
@@ -201,6 +206,7 @@ a{
 @media screen and (min-width: 1300px) {
 .content-wp{
   width: calc(70% - 300px);
+  max-width: 800px;
 }
 }
 /*窄屏*/
@@ -211,6 +217,21 @@ a{
 .content-wp{
   margin: 0 auto;
   transition: margin .5s;
+}
+.header{
+  width: 100%;
+  left: 0;
+}
+}
+@media screen and (max-width: 768px) {
+.content-wp{
+  width: calc(100% + 2px);
+  transition: margin .5s;
+  margin-left: -1px;
+}
+
+.post-list{
+  border: none;
 }
 .header{
   width: 100%;

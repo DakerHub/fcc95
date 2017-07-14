@@ -4,9 +4,6 @@
       <span>当前位置：</span>
       <el-breadcrumb>
         <el-breadcrumb-item>
-          文章
-        </el-breadcrumb-item>
-        <el-breadcrumb-item>
           文章列表
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -50,7 +47,7 @@
       <div class="post-wp" v-for="post in posts">
         <article class="post-upper">
           <div class="post-brief">
-            <h2 class="post-title"><a href="#">{{post.title}}</a></h2>
+            <h2 class="post-title"><a href="#" @click.prevent="turnToPost(post.title)">{{post.title}}</a></h2>
             <div class="post-abstract">
               <p>{{post.abstract}}</p>
             </div>
@@ -128,6 +125,9 @@
             this.posts.splice(0, 0, posts[i])
           }
         })
+      },
+      turnToPost (title) {
+        this.$router.push({path: '/post/' + title})
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -253,12 +253,17 @@
   line-height: 20px;
   width: 100%;
   border: thin solid #ccc;
-   text-align: center;
-   -webkit-transition: all .5s ease;
-   -moz-transition: all .5s ease;
-   transition: all .5s ease;
+  text-align: center;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  transition: all .5s ease;
+  background: url(../assets/tuzi.png) no-repeat;
+  background-position-x: -200px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .fliter-close:hover{
+  background-position-x: 0;
   background-color: #f9fafc;
   cursor: pointer;
 }
@@ -285,6 +290,7 @@
   border: thin solid #ccc;
   margin-top: 40px;
   margin-bottom: 20px;
+  border-radius: 5px;
 }
 .post-list.translateUp{
   transform: translateY(-160px);
@@ -319,7 +325,7 @@
   height: 100px;
 }
 .post-brief{
-  width: calc(100% - 100px);
+  width: calc(100% - 110px);
 }
 .post-abstract{
   text-indent: 2em;
@@ -354,5 +360,13 @@
   text-align: center;
   border-top: thin solid #ccc;
   padding-top: 10px;
+}
+@media screen and (max-width: 768px) {
+.fliter-close:hover{
+  background-position-x: -70px;
+}
+.post-list{
+  border: none;
+}
 }
 </style>
