@@ -24,6 +24,9 @@
 </template>
 <script>
   import Vue from 'vue'
+
+  var loadResourceFinish = false
+
   export default {
     name: 'home',
     data () {
@@ -39,20 +42,25 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPosts').then(function (res) {
-        var recentPosts = res.body
-        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
-          var recentPhotos = res.body
-          next(function (vm) {
-            for (let i = 0; i < recentPosts.length; i++) {
-              vm.recentPosts.splice(0, 0, recentPosts[i])
-            }
-            for (let i = 0; i < recentPhotos.length; i++) {
-              vm.recentPhotos.splice(0, 0, recentPhotos[i])
-            }
+      if (!loadResourceFinish) {
+        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPosts').then(function (res) {
+          var recentPosts = res.body
+          Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
+            var recentPhotos = res.body
+            next(function (vm) {
+              for (let i = 0; i < recentPosts.length; i++) {
+                vm.recentPosts.splice(0, 0, recentPosts[i])
+              }
+              for (let i = 0; i < recentPhotos.length; i++) {
+                vm.recentPhotos.splice(0, 0, recentPhotos[i])
+              }
+            })
           })
         })
-      })
+        loadResourceFinish = true
+      } else {
+        next()
+      }
     }
   }
 </script>

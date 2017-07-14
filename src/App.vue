@@ -16,12 +16,12 @@
         </div>
       </div>
       <nav>
-        <el-menu default-active="/Home" class="el-menu-vertical-demo" @select="navSelect" :router="true">
-          <el-menu-item index="/Home"><i class="iconfont icon-home"></i>主页</el-menu-item>
-          <el-menu-item index="/Posts"><i class="iconfont icon-iconfont-momarticle"></i>文章</el-menu-item>
-          <el-menu-item index="/PhotoWall"><i class="iconfont icon-pictureo"></i>绘画集</el-menu-item>
-          <el-menu-item index="/Demo"><i class="iconfont icon-code2"></i>Demo</el-menu-item>
-          <el-menu-item index="/About"><i class="iconfont icon-about"></i>About</el-menu-item>
+        <el-menu ref="navMenu" default-active="/home" class="el-menu-vertical-demo" @select="navSelect" :router="true">
+          <el-menu-item index="/home"><i class="iconfont icon-home"></i>主页</el-menu-item>
+          <el-menu-item index="/posts"><i class="iconfont icon-iconfont-momarticle"></i>文章</el-menu-item>
+          <el-menu-item index="/photoWall"><i class="iconfont icon-pictureo"></i>绘画集</el-menu-item>
+          <el-menu-item index="/demo"><i class="iconfont icon-code2"></i>Demo</el-menu-item>
+          <el-menu-item index="/about"><i class="iconfont icon-about"></i>About</el-menu-item>
         </el-menu>
       </nav>
       <div class="contact">
@@ -58,6 +58,7 @@ export default {
   name: 'app',
   data () {
     return {
+      activeRouter: '/home',
       personalInfo: {
         name: 'PaDaker',
         avatarUrl: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/50931280.jpg',
@@ -182,12 +183,16 @@ a{
 .header{
   width: calc(100% - 300px);
   height: 40px;
-  margin-left: 300px;
+  position: relative;
+  top: 0;
+  left: 300px;
+  z-index: 99;
   border-bottom: thin solid #dcdcdc;
   background-color: #fff;
 }
 .content-wp{
   width: 600px;
+  height: 0;
   margin-left: 400px;
   color: #000;
   transition: margin .5s;
@@ -209,7 +214,7 @@ a{
 }
 .header{
   width: 100%;
-  margin-left: 0;
+  left: 0;
 }
 }
 /*小屏*/

@@ -16,7 +16,7 @@
         <div class="post-filter">
           <div class="filter-time">
             <span class="filter-time-title">时间段：</span>
-            <el-radio-group v-model="filter.timeDuration" @change="showData" size="small">
+            <el-radio-group v-model="filter.timeDuration" size="small">
               <el-radio :label="7">最近一周</el-radio>
               <el-radio :label="30">最近一个月</el-radio>
               <el-radio :label="90">最近三个月</el-radio>
@@ -25,18 +25,18 @@
             </el-radio-group>
           </div>
           <div class="filter-tags">
-            <span>标&nbsp;&nbsp;&nbsp;&nbsp;签：</span>
-            <el-checkbox-group v-model="filter.tags" class="tags-wp" @change="showData">
-              <el-checkbox :label="tag" v-for="tag in totalTags">{{tag}}</el-checkbox>
+            <span>标<span class="opacity_0">占</span>签：</span>
+            <el-checkbox-group v-model="filter.tags" class="tags-wp">
+              <el-checkbox :label="tag" v-for="tag in totalTags" :key="tag">{{tag}}</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="filter-order">
-            <el-radio-group v-model="filter.order" @change="showData">
+            <el-radio-group v-model="filter.order">
               <el-radio :label="'desc'">降序</el-radio>
               <el-radio :label="'asc'">升序</el-radio>
             </el-radio-group>
           </div>
-          <el-button>筛选</el-button>
+          <el-button @click="filtrate(true)">筛选</el-button>
         </div>
       </div>
       <div class="fliter-close" @click="toggleFilterShow">
@@ -46,6 +46,7 @@
       </div>
     </div>
     <div class="post-list" :class="filterShow?'':'translateUp'">
+      <!--循环添加文章begin  -->
       <div class="post-wp" v-for="post in posts">
         <article class="post-upper">
           <div class="post-brief">
@@ -65,13 +66,24 @@
           </div>
         </div>
       </div>
+      <!--循环渲染文章end  -->
+      <!--分页组件begin  -->
+      <div class="pagination-wp">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="totalPostLength"
+          :current-page.sync="filter.curPage"
+          @current-change="changeCurrentPost">
+        </el-pagination>
+      </div>
+      <!--分页组件end  -->
     </div>
   </div>
 </template>
 <script>
   import Vue from 'vue'
-  const totalTags = ['Vue1', 'JS1', 'node1', 'css1', 'html1', 'JS2', 'node2', 'css2', 'html2', 'JS3', 'node3', 'css3', 'html3', 'node3', 'css3', 'html3']
-
+  const totalTags = ['Vue1', 'JS1', 'node1', 'css1', 'html1', 'JS2']
+  var loadResourceFinish = false
   export default {
     name: 'posts',
     data () {
@@ -80,11 +92,13 @@
         filterShow: false,
         tagsCheckAll: true,
         posts: [],
+        totalPostLength: 0,
         totalTags: totalTags,
         filter: {
           timeDuration: 'all',
           tags: [],
-          order: 'desc'
+          order: 'desc',
+          curPage: 1
         }
       }
     },
@@ -94,21 +108,76 @@
       },
       showData () {
         console.log(this.filter)
-      }
-    },
-    beforeRouteEnter: (to, from, next) => {
-      Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/posts').then(function (res) {
-        var posts = res.body.posts
-        next(function (vm) {
+      },
+      changeCurrentPost (cur) {
+        this.filtrate(false)
+      },
+      filtrate (turnToPage1) {
+        console.log('changeCurrentPost------------------------------------')
+        if (turnToPage1) {
+          this.filter.curPage = 1
+        }
+        this.$http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/posts', {
+          params: this.filter
+        }).then(function (res) {
+          // 替换新的文章
+          console.log(res)
+          var posts = res.body.posts
+          this.posts = []
           for (let i = 0; i < posts.length; i++) {
-            vm.posts.splice(0, 0, posts[i])
+            this.posts.splice(0, 0, posts[i])
           }
         })
-      })
+      }
+    },
+    beforeRouteEnter (to, from, next) {
+      console.log('beforeRouteEnter------------------------------------')
+      if (!loadResourceFinish) {
+        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/posts').then(function (res) {
+          var posts = res.body.posts
+          var total = res.body.total
+          next(function (vm) {
+            var originMenu = vm.$parent.$refs.navMenu.activedIndex
+            if (to.path.indexOf(originMenu) === -1) {
+              vm.$parent.$refs.navMenu.activedIndex = to.path
+            }
+            vm.totalPostLength = total
+            for (let i = 0; i < posts.length; i++) {
+              vm.posts.splice(0, 0, posts[i])
+            }
+          })
+        })
+        loadResourceFinish = true
+      } else {
+        next()
+      }
     }
+    // ,
+    // beforeRouteUpdate (to, from, next) {
+    //   console.log('beforeRouteUpdate------------------------------------')
+    //   this.filter = to.query
+    //   if (!this.filter.tags) {
+    //     this.filter.tags = []
+    //   }
+    //   // el-pagination组件接受的参数类型为number，所以必须转换一下
+    //   if (to.query && to.query.curPage) {
+    //     this.filter.curPage = parseInt(to.query.curPage)
+    //   } else {
+    //     this.filter = {
+    //       timeDuration: 'all',
+    //       tags: [],
+    //       order: 'desc',
+    //       curPage: 1
+    //     }
+    //   }
+    //   next()
+    // }
   }
 </script>
 <style scoped>
+.opacity_0{
+  opacity: 0;
+}
 .iconfont{
   font-size: 14px;
 }
@@ -116,7 +185,7 @@
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   font-size: 14px;
   color:#48576a;
-  overflow: hidden;
+  height: 0;
 }
 .breadcrumb-wp{
     height: 30px;
@@ -164,13 +233,13 @@
   display: flex;
   align-items: flex-start;
 }
+.filter-time{
+  display: flex;
+  align-items: flex-start;
+}
 .tags-wp{
   display: flex;
   flex-wrap: wrap;
-}
-.el-checkbox+.el-checkbox {
-  margin-right: 15px;
-  margin-left: 0;
 }
 .check-all{
   margin-left: 3px;
@@ -180,7 +249,7 @@
   position: relative;
   top: -1px;
   box-sizing: border-box;
-  height: 20px;
+  padding: 5px 0;
   line-height: 20px;
   width: 100%;
   border: thin solid #ccc;
@@ -215,6 +284,7 @@
   padding: 20px 40px;
   border: thin solid #ccc;
   margin-top: 40px;
+  margin-bottom: 20px;
 }
 .post-list.translateUp{
   transform: translateY(-160px);
@@ -279,5 +349,10 @@
 .tags span {
   display: inline-block;
   margin:5px 5px 5px 0;
+}
+.pagination-wp{
+  text-align: center;
+  border-top: thin solid #ccc;
+  padding-top: 10px;
 }
 </style>

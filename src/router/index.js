@@ -12,10 +12,10 @@ export default new Router({
   mode: 'history',
   routes: [
     { path: '', component: Home },
-    { path: '/Home', component: Home },
-    { path: '/Demo', component: Demo },
-    { path: '/About', component: About },
-    { path: '/PhotoWall', component: PhotoWall },
-    { path: '/Posts', component: Posts }
+    { path: '/home', component: Home },
+    { path: '/demo', component: Demo },
+    { path: '/about', component: About },
+    { path: '/photoWall', component: PhotoWall },
+    { path: '/posts', component: Posts }
   ]
 })
