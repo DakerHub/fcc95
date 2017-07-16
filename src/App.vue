@@ -1,6 +1,6 @@
 <template>
   <div class="app-wp">
-    <div class="side-bar">
+    <div class="side-bar" :class="{ sideBarShow }">
       <div class="personal-info">
         <div class="personal-avatar">
           <img :src="personalInfo.avatarUrl" alt="fcc">
@@ -43,8 +43,8 @@
       </div>
     </div>
     <header class="header">
-
     </header>
+    <el-button @click="sideBarShow = !sideBarShow" class="menu-btn">=</el-button>
     <div class="content-wp">
       <keep-alive>
         <router-view></router-view>
@@ -59,6 +59,7 @@ export default {
   data () {
     return {
       activeRouter: '/home',
+      sideBarShow: false,
       personalInfo: {
         name: 'PaDaker',
         avatarUrl: 'http://ostjp7jb4.bkt.clouddn.com/17-7-12/50931280.jpg',
@@ -110,6 +111,9 @@ a{
 .icon-3{
   height: 20px;
 }
+.menu-btn{
+  display: none;
+}
 .side-bar{
   position: fixed;
   top: 0;
@@ -123,6 +127,12 @@ a{
   justify-content: space-around;
   background-color: #20A0FF;
   transition: left .5s;
+}
+.menu-btn{
+  position: fixed;
+  left: 10px;
+  top: 2px;
+  z-index: 1000;
 }
 .side-bar nav{
   width: 100%;
@@ -221,6 +231,12 @@ a{
 .header{
   width: 100%;
   left: 0;
+}
+.side-bar.sideBarShow{
+  left: 0;
+}
+.menu-btn{
+  display: block;
 }
 }
 @media screen and (max-width: 768px) {
