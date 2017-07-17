@@ -12,19 +12,27 @@
         </div>
       </div>
     </div>
-    <lightbox :images="images" :showLightBox="false" ref="lightbox"></lightbox>
+    <lightbox :images="images" :showLightBox="false" ref="lightbox" :nThumbs="nThumbs"></lightbox>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Lightbox from 'vue-image-lightbox' // https://github.com/pexea12/vue-image-lightbox
-
   export default {
     name: 'photoWall',
     data () {
       return {
         photoCategory: {},
         images: []
+      }
+    },
+    computed: {
+      nThumbs () {
+        var nThumbs = 7
+        if (window.innerWidth <= 768) {
+          nThumbs = 3
+        }
+        return nThumbs
       }
     },
     methods: {
