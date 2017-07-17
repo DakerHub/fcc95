@@ -1,5 +1,5 @@
 <template>
-  <div class="app-wp">
+  <div class="app-wp" :class="{ sideBarShow }">
     <div class="side-bar" :class="{ sideBarShow }">
       <div class="personal-info">
         <div class="personal-avatar">
@@ -43,8 +43,9 @@
       </div>
     </div>
     <header class="header">
+    <el-button @click="showSideBar" class="menu-btn">=</el-button>
     </header>
-    <el-button @click="sideBarShow = !sideBarShow" class="menu-btn">=</el-button>
+    <div class="cover" :class="{ sideBarShow }" @click="hideNav"></div>
     <div class="content-wp">
       <keep-alive>
         <router-view></router-view>
@@ -83,6 +84,22 @@ export default {
   },
   methods: {
     navSelect (index) {
+      this.hideNav()
+    },
+    hideNav () {
+      var cover = document.getElementsByClassName('cover')[0]
+      if (cover.style.display === 'block' || cover.style.display === '') {
+        this.sideBarShow = false
+        document.getElementsByTagName('body')[0].style['overflow-y'] = 'auto'
+      }
+    },
+    showSideBar (e) {
+      if (this.sideBarShow) {
+        document.getElementsByTagName('body')[0].style['overflow-y'] = 'auto'
+      } else {
+        document.getElementsByTagName('body')[0].style['overflow-y'] = 'hidden'
+      }
+      this.sideBarShow = !this.sideBarShow
     }
   }
 }
@@ -93,6 +110,9 @@ html, body, .app-wp{
   height: 100%;
   color: #fff;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+body{
+  overflow-x: hidden;
 }
 .el-menu-item.is-active{
   color: #fff;
@@ -198,7 +218,7 @@ a{
 .header{
   width: calc(100% - 300px);
   height: 40px;
-  position: relative;
+  position: fixed;
   top: 0;
   left: 300px;
   z-index: 99;
@@ -208,9 +228,20 @@ a{
 .content-wp{
   width: 600px;
   height: 0;
+  margin-top: 40px;
   margin-left: 400px;
   color: #000;
   transition: margin .5s;
+}
+.cover{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: none;
 }
 /*大屏用户*/
 @media screen and (min-width: 1300px) {
@@ -225,7 +256,7 @@ a{
   left: -300px;
 }
 .content-wp{
-  margin: 0 auto;
+  margin: 40px auto;
   transition: margin .5s;
 }
 .header{
@@ -234,6 +265,9 @@ a{
 }
 .side-bar.sideBarShow{
   left: 0;
+}
+.sideBarShow.cover{
+  display: block;
 }
 .menu-btn{
   display: block;

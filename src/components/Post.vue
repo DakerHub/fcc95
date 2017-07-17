@@ -12,8 +12,8 @@
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <div class="post">
-        <h2 class="post-title">{{post.postTitle}}</h2>
+      <div class="post" :key="postTitle">
+        <h2 class="post-title">{{postTitle}}</h2>
         <div class="post-content">
           {{post.postContent}}
         </div>
@@ -29,10 +29,14 @@
     data () {
       return {
         post: {
-          postTitle: this.$route.params.title,
           postContent: '',
           postDate: ''
         }
+      }
+    },
+    computed: {
+      postTitle () {
+        return this.$route.params.title
       }
     },
     beforeRouteEnter: (to, from, next) => {
@@ -42,7 +46,6 @@
         }
       }).then(function (res) {
         next(function (vm) {
-          console.log(vm.$route)
           vm.post.postContent = res.body.postContent
           var originMenu = vm.$parent.$refs.navMenu.activedIndex
           if (to.path.indexOf(originMenu) === -1) {

@@ -12,7 +12,7 @@
       <div class="post-filter-wp">
         <div class="post-filter">
           <div class="filter-time">
-            <span class="filter-time-title">时间段：</span>
+            <span class="filter-title">时间段：</span>
             <el-radio-group v-model="filter.timeDuration" size="small">
               <el-radio :label="7">最近一周</el-radio>
               <el-radio :label="30">最近一个月</el-radio>
@@ -22,7 +22,7 @@
             </el-radio-group>
           </div>
           <div class="filter-tags">
-            <span>标<span class="opacity_0">占</span>签：</span>
+            <span class="filter-title">标<span class="opacity_0">占</span>签：</span>
             <el-checkbox-group v-model="filter.tags" class="tags-wp">
               <el-checkbox :label="tag" v-for="tag in totalTags" :key="tag">{{tag}}</el-checkbox>
             </el-checkbox-group>
@@ -237,6 +237,12 @@
   display: flex;
   align-items: flex-start;
 }
+.filter-title{
+  width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+  width: 60px;
+}
 .tags-wp{
   display: flex;
   flex-wrap: wrap;
@@ -350,7 +356,13 @@
   text-decoration: underline;
   color: #000;
 }
-.tags{
+.el-radio{
+  margin-right: 15px;
+  margin-left: 0;
+}
+.el-checkbox{
+  margin-right: 15px;
+  margin-left: 0;
 }
 .tags span {
   display: inline-block;
