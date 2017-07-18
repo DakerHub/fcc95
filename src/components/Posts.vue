@@ -69,6 +69,7 @@
         <el-pagination
           layout="prev, pager, next"
           :total="totalPostLength"
+          :small="isSmall"
           :current-page.sync="filter.curPage"
           @current-change="changeCurrentPost">
         </el-pagination>
@@ -84,6 +85,7 @@
   export default {
     name: 'posts',
     data () {
+      var winW = window.innerWidth
       return {
         isIndeterminate: false,
         filterShow: false,
@@ -91,6 +93,7 @@
         posts: [],
         totalPostLength: 0,
         totalTags: totalTags,
+        isSmall: winW < 368,
         filter: {
           timeDuration: 'all',
           tags: [],

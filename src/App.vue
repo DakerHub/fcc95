@@ -228,7 +228,7 @@ a{
 .content-wp{
   width: 600px;
   height: 0;
-  margin-top: 40px;
+  padding-top: 40px;
   margin-left: 400px;
   color: #000;
   transition: margin .5s;
@@ -256,7 +256,7 @@ a{
   left: -300px;
 }
 .content-wp{
-  margin: 40px auto;
+  margin: 0 auto;
   transition: margin .5s;
 }
 .header{

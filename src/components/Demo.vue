@@ -1,13 +1,24 @@
 <template>
   <div>
-    <h2>demo</h2>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 <script>
   export default {
-    name: 'demo'
+    name: 'demo',
+    beforeRouteEnter: (to, from, next) => {
+      // ...
+      next(function (vm) {
+        var originMenu = vm.$parent.$refs.navMenu.activedIndex
+        if (to.path.indexOf(originMenu) === -1) {
+          vm.$parent.$refs.navMenu.activedIndex = '/demo'
+        }
+      })
+    }
   }
 </script>
-<style>
-  
+<style scoped>
+
 </style>
