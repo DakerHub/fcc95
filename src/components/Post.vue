@@ -71,7 +71,6 @@ h2{
     height: 30px;
     display: flex;
     align-items: center;
-    border: thin solid #ccc;
     margin-top: -1px;
     padding-left: 10px;
     background-color: #fff;
@@ -80,9 +79,9 @@ h2{
 }
 .post{
   margin: 20px 0;
-  border: thin solid #ccc;
   border-radius: 5px;
   padding: 20px 45px;
+  background-color: #fff;
 }
 .post-content{
   font-size: 16px;

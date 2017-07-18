@@ -56,10 +56,10 @@
           Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
             var recentPhotos = res.body
             next(function (vm) {
-              var originMenu = vm.$parent.$refs.navMenu.activedIndex
-              if (to.path.indexOf(originMenu) === -1) {
-                vm.$parent.$refs.navMenu.activedIndex = to.path
-              }
+              vm.$parent.$refs.navMenu.activedIndex = '/home'
+              // if (to.path.indexOf(originMenu) === -1 || to.path === '') {
+              //   vm.$parent.$refs.navMenu.activedIndex = to.path
+              // }
               for (let i = 0; i < recentPosts.length; i++) {
                 vm.recentPosts.splice(0, 0, recentPosts[i])
               }
@@ -122,6 +122,7 @@
   font-size: 14px;
   border-radius: 5px;
   color: #676767;
+  background-color: #fff;
   transition: all .3s;
 }
 .recentPost:hover{

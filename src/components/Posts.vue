@@ -194,19 +194,17 @@
     height: 30px;
     display: flex;
     align-items: center;
-    border: thin solid #ccc;
     margin-top: -1px;
     padding-left: 10px;
     background-color: #fff;
     position: relative;
     z-index: 10;
-    box-shadow: 0 0 8px 2px rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
+    box-shadow: 0 0 8px 2px rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5); 
 }
 .post-filter-wp{
   height: 160px;
   overflow-x: hidden;
   overflow-y: auto;
-  border: thin solid #ccc;
   margin-top: -1px;
   position: relative;
   top: 0;
@@ -217,6 +215,8 @@
 .post-filter-slider{
   position: relative;
   top: 0;
+  background-color: #fff;
+  border-radius: 5px;
   -webkit-transition: top .5s ease;
   -moz-transition: top .5s ease;
   transition: top .5s ease;
@@ -256,12 +256,10 @@
 }
 .fliter-close{
   position: relative;
-  top: -1px;
   box-sizing: border-box;
   padding: 5px 0;
   line-height: 20px;
   width: 100%;
-  border: thin solid #ccc;
   text-align: center;
   -webkit-transition: all .5s ease;
   -moz-transition: all .5s ease;
@@ -270,6 +268,7 @@
   background-position-x: -200px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  box-shadow: 0 0 8px 2px rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
 }
 .fliter-close:hover{
   background-position-x: 0;
@@ -296,10 +295,10 @@
   -moz-transition: transform .5s ease;
   transition: transform .5s ease;
   padding: 20px 40px;
-  border: thin solid #ccc;
   margin-top: 40px;
   margin-bottom: 20px;
   border-radius: 5px;
+  background-color: #fff;
 }
 .post-list.translateUp{
   transform: translateY(-160px);
@@ -314,6 +313,7 @@
   display: block;
   background-color: #ccc;
   margin-bottom: 10px;
+  border: none;
 }
 .post-upper{
   width: 100%;

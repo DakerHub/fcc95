@@ -11,15 +11,17 @@
             </el-breadcrumb-item>
         </el-breadcrumb>
     </div>
-    <h2>{{title}}</h2>
-    <div class="demo-result">
-        <iframe class="demo-iframe" :width="demoDetail.width" :height="demoDetail.height" :src="demoDetail.src" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-    </div>
-    <div class="demo-text">
-        {{demoDetail.text}}
-    </div>
-    <div class="demo-meta">
-        <div>{{demoDetail.date}}</div>
+    <div class="demo-wp">
+        <h2>{{title}}</h2>
+        <div class="demo-result">
+            <iframe class="demo-iframe" :width="demoDetail.width" :height="demoDetail.height" :src="demoDetail.src" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+        </div>
+        <div class="demo-text">
+            {{demoDetail.text}}
+        </div>
+        <div class="demo-meta">
+            <div>{{demoDetail.date}}</div>
+        </div>
     </div>
   </div>
 </template>
@@ -58,13 +60,18 @@
     height: 30px;
     display: flex;
     align-items: center;
-    border: thin solid #ccc;
     margin-top: -1px;
     padding-left: 10px;
     font-size: 14px;
     background-color: #fff;
     position: relative;
     z-index: 10;
+}
+.demo-wp{
+    background-color: #fff;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 20px;
 }
 h2{
     text-align: center;
@@ -79,7 +86,7 @@ h2{
     width: 100%;
     height: 300px;
     overflow: hidden;
-    border: thin solid #ccc;
+    border-radius: 5px;
 }
 .demo-text{
     padding: 20px 0;

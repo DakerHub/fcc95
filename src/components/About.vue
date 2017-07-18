@@ -24,5 +24,7 @@
   }
 </script>
 <style>
-  
+.el-collapse{
+  border: none;
+}
 </style>

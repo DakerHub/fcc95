@@ -106,12 +106,18 @@ h2{
   font-weight: bold;
   padding: 10px 0;
 }
+.photo-title{
+  padding-left: 10px;
+  color: #4f5d71;
+}
 .phtot-wall-wp{
   padding: 20px;
 }
 .photo-wp{
   width: 160px;
-  margin: 5px;
+  margin: 5px 10px;
+  padding: 5px 0;
+  background-color: #fff;
 }
 .photos-wp{
   display: flex;

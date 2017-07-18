@@ -141,6 +141,7 @@ a{
   z-index: 999;
   height: 100%;
   width: 300px;
+  border-right: thin solid #20a0ff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -293,5 +294,10 @@ a{
 .personal-avatar{
   display: none;
 }
+}
+</style>
+<style>
+body{
+  background-color: #f1f2f7;
 }
 </style>

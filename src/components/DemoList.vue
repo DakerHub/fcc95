@@ -58,7 +58,7 @@ a{
     height: 30px;
     display: flex;
     align-items: center;
-    border: thin solid #ccc;
+    color: #48576a;
     margin-top: -1px;
     padding-left: 10px;
     font-size: 14px;
@@ -71,6 +71,9 @@ a{
   flex-wrap: wrap;
   justify-content: flex-start;
   padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-top: 20px;
 }
 .demo-index{
   display: block;
@@ -82,7 +85,7 @@ a{
   text-align: center;
   border-radius: 50%;
   color: #fff;
-  background-color: #ccc;
+  background-color: #97a8be;
   margin-right: 5px;
 }
 .demo-title{
