@@ -8,13 +8,13 @@
       </el-carousel>
       <h2 class="recent-post-title">最近文章：</h2>
       <article class="recentPost" v-for="(post,index) in recentPosts">
-        <h3 class="post-title" @click="turnToPost(post.title)">{{post.title}} <a href="#" class="turn-to" @click.prevent="turnToPost(post.title)"><i class="el-icon-d-arrow-right"></i></a></h3>
+        <h3 class="post-title" @click="turnToPost(post.id)">{{post.title}} <a href="#" class="turn-to" @click.prevent="turnToPost(post.title)"><i class="el-icon-d-arrow-right"></i></a></h3>
         <div class="post-abstract">
           {{post.abstract}}
         </div>
         <div class="post-meta">
           <time class="post-meta-item"><i class="iconfont icon-timefull"></i>{{post.date}}</time>
-          <div class="post-meta-item">
+          <div class="post-meta-item tags">
             <span v-for="tag in post.tags"><i class="iconfont icon-tag"></i>{{tag}}</span>
           </div>
         </div>
@@ -24,7 +24,7 @@
 </template>
 <script>
   import Vue from 'vue'
-
+  import API from '../assets/js/API.js'
   var loadResourceFinish = false
 
   export default {
@@ -33,7 +33,8 @@
       return {
         recentPosts: [],
         recentPhotos: [],
-        date: ''
+        date: '',
+        idMap: {}
       }
     },
     computed: {
@@ -44,29 +45,55 @@
       }
     },
     methods: {
-      turnToPost (title) {
-        console.log(title)
-        this.$router.push({path: '/post/' + title})
+      turnToPost (id) {
+        this.$router.push({path: '/post/' + id})
+      },
+      id2TagName (id) {
+        var idArr = id.split('|')
+        var tagArr = []
+        var tagsMap = this.idMap
+        if (idArr.length > 0) {
+          for (let i = 0; i < idArr.length; i++) {
+            var tagId = idArr[i]
+            var tagName = tagsMap[tagId]
+            if (tagName) {
+              tagArr.push(tagName)
+            }
+          }
+        }
+        return tagArr
+      },
+      getPosts () {
+        var self = this
+        Vue.http.get(API.getRecentPosts).then(function (res) {
+          var posts = res.body.posts
+          for (let i = 0; i < posts.length; i++) {
+            var tagId = posts[i]['tagsId']
+            posts[i]['tags'] = self.id2TagName(tagId)
+          }
+          self.recentPosts = posts
+        })
+      },
+      getPhotos () {
+        var self = this
+        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
+          self.recentPhotos = res.body
+        })
       }
     },
     beforeRouteEnter (to, from, next) {
       if (!loadResourceFinish) {
-        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPosts').then(function (res) {
-          var recentPosts = res.body
-          Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/recentPhotos').then(function (res) {
-            var recentPhotos = res.body
-            next(function (vm) {
-              vm.$parent.$refs.navMenu.activedIndex = '/home'
-              // if (to.path.indexOf(originMenu) === -1 || to.path === '') {
-              //   vm.$parent.$refs.navMenu.activedIndex = to.path
-              // }
-              for (let i = 0; i < recentPosts.length; i++) {
-                vm.recentPosts.splice(0, 0, recentPosts[i])
-              }
-              for (let i = 0; i < recentPhotos.length; i++) {
-                vm.recentPhotos.splice(0, 0, recentPhotos[i])
-              }
-            })
+        Vue.http.get(API.getTags).then(function (res) {
+          var tags = res.body.tags
+          next(function (vm) {
+            vm.$parent.$refs.navMenu.activedIndex = '/home'
+            // 将返回的tag数组转换为id和name对应的map
+            var map = {}
+            for (let i = 0; i < tags.length; i++) {
+              var tag = tags[i]
+              map[tag.id] = tag.tagName
+            }
+            vm.idMap = map
           })
         })
         loadResourceFinish = true
@@ -78,10 +105,17 @@
           }
         })
       }
+    },
+    created () {
+      this.getPosts()
+      this.getPhotos()
     }
   }
 </script>
 <style scoped>
+.iconfont{
+  font-size: 16px;
+}
 .img{
   width: 600px;
   margin: 0 auto;
@@ -175,6 +209,9 @@
 }
 .post-meta-item{
   margin-right: 20px;
+}
+.tags span{
+  padding-right: 5px;
 }
 @media screen and (max-width: 768px) {
 .img{

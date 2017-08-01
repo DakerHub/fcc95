@@ -29,6 +29,6 @@ export default new Router({
     { path: '/posts',
       component: Posts
     },
-    { path: '/post/:title', component: Post }
+    { path: '/post/:id', component: Post }
   ]
 })
