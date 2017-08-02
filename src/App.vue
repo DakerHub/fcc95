@@ -16,7 +16,7 @@
         </div>
       </div>
       <nav>
-        <el-menu ref="navMenu" default-active="/home" class="el-menu-vertical-demo" @select="navSelect" :router="true">
+        <el-menu ref="navMenu" :default-active="initRoute" class="el-menu-vertical-demo" @select="navSelect" :router="true">
           <el-menu-item index="/home"><i class="iconfont icon-home"></i>主页</el-menu-item>
           <el-menu-item index="/posts"><i class="iconfont icon-iconfont-momarticle"></i>文章</el-menu-item>
           <el-menu-item index="/photoWall"><i class="iconfont icon-pictureo"></i>绘画集</el-menu-item>
@@ -80,6 +80,11 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    initRoute () {
+      return this.$route.path
     }
   },
   methods: {

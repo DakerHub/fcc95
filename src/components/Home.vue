@@ -86,7 +86,6 @@
         Vue.http.get(API.getTags).then(function (res) {
           var tags = res.body.tags
           next(function (vm) {
-            vm.$parent.$refs.navMenu.activedIndex = '/home'
             // 将返回的tag数组转换为id和name对应的map
             var map = {}
             for (let i = 0; i < tags.length; i++) {
@@ -99,10 +98,6 @@
         loadResourceFinish = true
       } else {
         next(function (vm) {
-          var originMenu = vm.$parent.$refs.navMenu.activedIndex
-          if (to.path.indexOf(originMenu) === -1) {
-            vm.$parent.$refs.navMenu.activedIndex = to.path
-          }
         })
       }
     },

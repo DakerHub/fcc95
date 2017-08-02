@@ -78,11 +78,7 @@
       Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/photos').then(function (res) {
         var photoCategory = res.body
         next(function (vm) {
-          var originMenu = vm.$parent.$refs.navMenu.activedIndex
           var dateArr = []
-          if (to.path.indexOf(originMenu) === -1) {
-            vm.$parent.$refs.navMenu.activedIndex = '/photoWall'
-          }
           for (var n in photoCategory) {
             dateArr.push(n)
           }

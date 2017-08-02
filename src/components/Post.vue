@@ -70,10 +70,7 @@
               hljs.highlightBlock(nodes[i])
             }
           })
-          var originMenu = vm.$parent.$refs.navMenu.activedIndex
-          if (to.path.indexOf(originMenu) === -1) {
-            vm.$parent.$refs.navMenu.activedIndex = '/posts'
-          }
+          vm.$parent.$refs.navMenu.activedIndex = '/posts'
         })
       })
     }
@@ -123,6 +120,13 @@
     display: block;
     margin: 20px 0;
     background-color: #ccc;
+  }
+  @media screen and (max-width: 768px) {
+  .post-content {
+    font-size: 14px;
+    line-height: 18px;
+    text-indent: 2em;
+  }
   }
 </style>
 <style>

@@ -24,11 +24,11 @@
           <div class="filter-tags">
             <span class="filter-title">标<span class="opacity_0">占</span>签：</span>
             <el-checkbox-group v-model="filter.tags" class="tags-wp">
-              <el-checkbox :label="tag" v-for="tag in totalTags" :key="tag">{{tag}}</el-checkbox>
+              <el-checkbox :label="key" v-for="(val,key) in tagIdMap" :key="key">{{val}}</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="filter-order">
-            <el-radio-group v-model="filter.order">
+            <el-radio-group v-model="filter.dir">
               <el-radio :label="'desc'">降序</el-radio>
               <el-radio :label="'asc'">升序</el-radio>
             </el-radio-group>
@@ -47,20 +47,20 @@
       <div class="post-wp" v-for="post in posts">
         <article class="post-upper">
           <div class="post-brief">
-            <h2 class="post-title"><a href="#" @click.prevent="turnToPost(post.title)">{{post.title}}</a></h2>
+            <h2 class="post-title"><a href="#" @click.prevent="turnToPost(post.id)">{{post.name}}</a></h2>
             <div class="post-abstract">
               <p>{{post.abstract}}</p>
             </div>
           </div>
           <div class="post-poster">
-            <img :src="post.poster.url" alt="">
+            <img :src="post.posterUrl" alt="">
           </div>
         </article>
         <div class="post-meta post-lower">
-          <time><i class="iconfont icon-timefull"></i>{{post.meta.time}}</time>
-          <div class="tags">
-            <span v-for="tag in post.meta.tags"><i class="iconfont icon-tag"></i>{{tag}}</span>
-          </div>
+          <time><i class="iconfont icon-timefull"></i>{{post.time}}</time>
+           <div class="tags">
+            <span v-for="tag in post.tags"><i class="iconfont icon-tag"></i>{{tag}}</span>
+          </div> 
         </div>
       </div>
       <!--循环渲染文章end  -->
@@ -70,7 +70,7 @@
           layout="prev, pager, next"
           :total="totalPostLength"
           :small="isSmall"
-          :current-page.sync="filter.curPage"
+          :current-page.sync="filter.page"
           @current-change="changeCurrentPost">
         </el-pagination>
       </div>
@@ -80,7 +80,7 @@
 </template>
 <script>
   import Vue from 'vue'
-  const totalTags = ['Vue1', 'JS1', 'node1', 'css1', 'html1', 'JS2']
+  import API from './../assets/js/API.js'
   var loadResourceFinish = false
   export default {
     name: 'posts',
@@ -91,14 +91,16 @@
         filterShow: false,
         tagsCheckAll: true,
         posts: [],
+        tagIdMap: null,
         totalPostLength: 0,
-        totalTags: totalTags,
+        totalTags: [],
         isSmall: winW < 368,
         filter: {
           timeDuration: 'all',
           tags: [],
-          order: 'desc',
-          curPage: 1
+          dir: 'desc',
+          page: 1,
+          numPerPage: 10
         }
       }
     },
@@ -113,68 +115,67 @@
         this.filtrate(false)
       },
       filtrate (turnToPage1) {
-        console.log('changeCurrentPost------------------------------------')
         if (turnToPage1) {
-          this.filter.curPage = 1
+          this.filter.page = 1
         }
-        this.$http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/posts', {
-          params: this.filter
-        }).then(function (res) {
-          // 替换新的文章
-          console.log(res)
-          var posts = res.body.posts
-          this.posts = []
-          for (let i = 0; i < posts.length; i++) {
-            this.posts.splice(0, 0, posts[i])
-          }
-        })
+        this.getPosts()
       },
       turnToPost (title) {
         this.$router.push({path: '/post/' + title})
+      },
+      id2TagName (id) {
+        var idArr = id.split('|')
+        var tagArr = []
+        var tagsMap = this.tagIdMap
+        if (idArr.length > 0) {
+          for (let i = 0; i < idArr.length; i++) {
+            var tagId = idArr[i]
+            var tagName = tagsMap[tagId]
+            if (tagName) {
+              tagArr.push(tagName)
+            }
+          }
+        }
+        return tagArr
+      },
+      getPosts () {
+        const self = this
+        Vue.http.get(API.getPosts, {params: this.filter}).then(function (res) {
+          var posts = res.body.posts
+          for (let i = 0; i < posts.length; i++) {
+            var tagId = posts[i]['tagsId']
+            posts[i]['tags'] = self.id2TagName(tagId)
+          }
+          console.log(posts)
+          var total = parseInt(res.body.total)
+          self.totalPostLength = total
+          self.posts = posts
+        })
       }
     },
     beforeRouteEnter (to, from, next) {
-      console.log('beforeRouteEnter------------------------------------')
       if (!loadResourceFinish) {
-        Vue.http.get('https://www.easy-mock.com/mock/596642c558618039284c74df/fcc95/posts').then(function (res) {
-          var posts = res.body.posts
-          var total = res.body.total
+        Vue.http.get(API.getTags).then(function (res) {
+          var tags = res.body.tags
           next(function (vm) {
-            var originMenu = vm.$parent.$refs.navMenu.activedIndex
-            if (to.path.indexOf(originMenu) === -1) {
-              vm.$parent.$refs.navMenu.activedIndex = to.path
+            // 将返回的tag数组转换为id和name对应的map
+            var map = {}
+            for (let i = 0; i < tags.length; i++) {
+              var tag = tags[i]
+              map[tag.id] = tag.tagName
+              vm.totalTags.push(tag.tagName)
             }
-            vm.totalPostLength = total
-            for (let i = 0; i < posts.length; i++) {
-              vm.posts.splice(0, 0, posts[i])
-            }
+            vm.tagIdMap = map
           })
         })
         loadResourceFinish = true
       } else {
         next()
       }
+    },
+    created () {
+      this.getPosts()
     }
-    // ,
-    // beforeRouteUpdate (to, from, next) {
-    //   console.log('beforeRouteUpdate------------------------------------')
-    //   this.filter = to.query
-    //   if (!this.filter.tags) {
-    //     this.filter.tags = []
-    //   }
-    //   // el-pagination组件接受的参数类型为number，所以必须转换一下
-    //   if (to.query && to.query.curPage) {
-    //     this.filter.curPage = parseInt(to.query.curPage)
-    //   } else {
-    //     this.filter = {
-    //       timeDuration: 'all',
-    //       tags: [],
-    //       order: 'desc',
-    //       curPage: 1
-    //     }
-    //   }
-    //   next()
-    // }
   }
 </script>
 <style scoped>

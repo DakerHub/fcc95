@@ -11,10 +11,6 @@
     beforeRouteEnter: (to, from, next) => {
       // ...
       next(function (vm) {
-        var originMenu = vm.$parent.$refs.navMenu.activedIndex
-        if (to.path.indexOf(originMenu) === -1) {
-          vm.$parent.$refs.navMenu.activedIndex = '/demo'
-        }
       })
     }
   }
