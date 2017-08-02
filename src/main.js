@@ -19,7 +19,6 @@ Vue.use(VueResource)
 Vue.use(VueLazyLoad)
 Vue.use(VueTouch, { name: 'v-touch' })
 Vue.config.productionTip = true
-Vue.http.post('http://localhost/learnPHP/ch14/ex3.php').then(function (res) { console.log(res) })
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

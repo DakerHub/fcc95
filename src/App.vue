@@ -84,7 +84,8 @@ export default {
   },
   computed: {
     initRoute () {
-      return this.$route.path
+      const path = this.$route.path
+      return path === '/' ? '/home' : path
     }
   },
   methods: {

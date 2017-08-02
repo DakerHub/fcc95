@@ -1,4 +1,5 @@
-const apiRoot = 'http://localhost/learnPHP/vueCMS/api'
+// const apiRoot = 'http://localhost/learnPHP/vueCMS/api'
+const apiRoot = 'http://localhost/vue/vueCMS/api'
 export default {
   getRecentPosts: apiRoot + '/post/getRecentPosts.php',
   getTags: apiRoot + '/tag/getTags.php',

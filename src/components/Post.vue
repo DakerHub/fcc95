@@ -111,7 +111,6 @@
   .post-content {
     font-size: 16px;
     line-height: 27px;
-    text-indent: 2em;
   }
   
   .post-content::before {
@@ -125,7 +124,6 @@
   .post-content {
     font-size: 14px;
     line-height: 18px;
-    text-indent: 2em;
   }
   }
 </style>
